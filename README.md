@@ -1,150 +1,93 @@
 # Intelligent Route Planner
 
-A classical AI search system that finds low-cost routes through a weighted graph using **Uniform Cost Search (UCS)** and **A\***.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/) [![Tests](https://img.shields.io/badge/tests-passing-2E7D32)](#testing) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Tests](https://img.shields.io/badge/Tests-Pytest-green)
-![Focus](https://img.shields.io/badge/AI-Search-orange)
+> Compare Uniform Cost Search and A* for optimal route planning on weighted graphs.
 
-## Why this project?
+## Why this project exists
 
-Navigation and logistics problems can be represented as a state-space search problem: the system starts at one location, chooses among available transitions, and tries to reach a goal while minimizing cost.
+A delivery or navigation system needs to find a low-cost route while avoiding unnecessary exploration of the search space.
 
-This project translates that idea into a compact, reusable route-planning engine. The cost can represent distance, travel time, tolls, energy, or a weighted combination of objectives.
+The implementation is intentionally small and reproducible so the underlying AI reasoning is easy to inspect, benchmark, and discuss.
 
-The main question explored here is:
+## AI concepts demonstrated
 
-> **Can heuristic search find the same optimal route as uninformed search while examining fewer states?**
-
-## What it demonstrates
-
-- State-space formulation for route planning
-- Weighted graph search
-- Uniform Cost Search for optimal path finding
-- A* search with a heuristic function
-- Path reconstruction
-- Search-efficiency benchmarking
-- Unit testing for algorithmic correctness
+Uniform Cost Search (UCS), A* Search, admissible heuristics, graph modeling, path reconstruction, complexity trade-offs
 
 ## Architecture
 
-```text
-                 +-------------------+
-                 |   Route Problem   |
-                 | graph + start/end |
-                 +---------+---------+
-                           |
-                +----------+----------+
-                |                     |
-                v                     v
-       +----------------+     +----------------+
-       | Uniform Cost   |     |      A*        |
-       | Search         |     | Search         |
-       +--------+-------+     +--------+-------+
-                |                      |
-                +----------+-----------+
-                           v
-                 +--------------------+
-                 | Optimal Route +    |
-                 | Search Statistics  |
-                 +--------------------+
+```mermaid
+flowchart LR
+    A[Route graph] --> B[State space]
+    B --> C[UCS]
+    B --> D[A* + heuristic]
+    C --> E[Optimal route]
+    D --> E
+    E --> F[Cost + search metrics]
 ```
 
-## Example use case
+## Results
 
-Consider a delivery network connecting a warehouse to a customer. Each road has a different cost. A route planner can search the network while optimizing for total route cost.
-
-The included demo compares UCS and A* on the same network.
-
-Run it with:
-
-```bash
-python examples/demo.py
-```
-
-Expected output format:
-
-```text
-Intelligent Route Planner
-============================
-
-Uniform Cost Search
-Path: Warehouse -> ... -> Customer
-Cost: ...
-Expanded nodes: ...
-
-A* Search
-Path: Warehouse -> ... -> Customer
-Cost: ...
-Expanded nodes: ...
-```
-
-The exact numbers depend on the graph in `examples/demo.py`.
-
-## Algorithms
-
-### Uniform Cost Search
-
-UCS expands the frontier node with the smallest accumulated path cost `g(n)`. With non-negative edge costs, it returns an optimal path.
-
-### A*
-
-A* prioritizes nodes using:
-
-`f(n) = g(n) + h(n)`
-
-where:
-
-- `g(n)` is the cost accumulated so far
-- `h(n)` estimates the remaining cost
-
-For distance-based graphs, the included Euclidean heuristic is useful when the edge costs are consistent with geometric distance.
+| Algorithm | Path cost | Nodes expanded |
+|---|---:|---:|
+| Uniform Cost Search | 13.48 | 7 |
+| A* Search | 13.48 | 6 |
 
 ## Project structure
 
 ```text
 intelligent-route-planner/
 ├── README.md
+├── LICENSE
 ├── requirements.txt
-├── src/
-│   ├── __init__.py
-│   └── route_planner.py
 ├── examples/
 │   └── demo.py
+├── src/
+│   └── implementation
 └── tests/
-    └── test_route_planner.py
+    └── test_*.py
 ```
 
-## Running tests
-
-Install the development dependency:
+## Run locally
 
 ```bash
+python -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
+
 pip install -r requirements.txt
+python examples/demo.py
 ```
 
-Run:
+## Testing
 
 ```bash
-pytest
+PYTHONPATH=. pytest -q
 ```
 
-## Portfolio framing
+## Ideas for extending the project
 
-This repository is intentionally presented as an independent AI engineering project inspired by concepts studied in Stanford CS221: Artificial Intelligence: Principles and Techniques.
+- Scale the environment or dataset and compare runtime and search behavior.
+- Add richer visualizations or an interactive interface.
+- Introduce additional baselines and ablation experiments.
+- Add configuration files so experiments are reproducible from the command line.
 
-The portfolio emphasis is on the **application, algorithm implementation, experimentation, testing, and documentation**, rather than reproducing course starter code or course solutions.
+## Portfolio note
 
-## Future extensions
+This project is independently structured and documented as a portfolio implementation inspired by AI concepts studied in CS221. Do not publish course-provided starter code, solutions, tests, or restricted materials.
 
-- Add a real road-network dataset
-- Support multi-objective costs such as distance + toll + time
-- Add bidirectional search
-- Add Greedy Best-First Search as a baseline
-- Visualize frontier expansion step by step
-- Add a small web UI for interactive route selection
-- Benchmark runtime and node expansions across graph sizes
+## GitHub metadata
 
-## License
+**Repository name**
 
-MIT License. See `LICENSE`.
+`intelligent-route-planner`
+
+**Description**
+
+`Compare Uniform Cost Search and A* for optimal route planning on weighted graphs.`
+
+**Topics**
+
+`artificial-intelligence` `a-star` `search-algorithms` `pathfinding` `graph-algorithms` `python` `cs221`
